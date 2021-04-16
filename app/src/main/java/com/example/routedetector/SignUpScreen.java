@@ -1,5 +1,7 @@
 package com.example.routedetector;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class SignUpScreen extends AppCompatActivity {
     EditText etSignUpEmail;
     EditText etSignUpPassword;
+    EditText etSignUpConfirmPassword;
     EditText etSignUpName;
     Button createAccountButton;
     TextView loginTextSignUpScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +57,23 @@ public class SignUpScreen extends AppCompatActivity {
                 }
             }
         });
+        etSignUpConfirmPassword = findViewById(R.id.etSignUpConfirmPassword);
+        etSignUpConfirmPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    v.setBackgroundResource(R.drawable.focused_border);
+                } else {
+                    v.setBackgroundResource(R.drawable.unfocused_border);
+                }
+            }
+        });
         loginTextSignUpScreen = findViewById(R.id.loginTextSignUpScreen);
         loginTextSignUpScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(SignUpScreen.this, LoginScreen.class);
-//                startActivity(intent);
-
+                Intent intent = new Intent(SignUpScreen.this, LoginScreen.class);
+                startActivity(intent);
             }
         });
         createAccountButton = findViewById(R.id.createAccountButton);
@@ -70,15 +84,41 @@ public class SignUpScreen extends AppCompatActivity {
                 String name = etSignUpName.getText().toString();
                 String email = etSignUpEmail.getText().toString();
                 String password = etSignUpPassword.getText().toString();
-
-                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(SignUpScreen.this, "Insert Data First", Toast.LENGTH_LONG).show();
-                } else {
-                    dbClass.insert(name, email, password);
-                    Toast.makeText(SignUpScreen.this, "Data Saved", Toast.LENGTH_LONG).show();
-                    etSignUpName.setText("");
-                    etSignUpEmail.setText("");
-                    etSignUpPassword.setText("");
+                String confirmPassword = etSignUpConfirmPassword.getText().toString();
+                boolean emailExistenceCheck = false;
+                Cursor cursor = dbClass.getData();
+                if (cursor.moveToPosition(0)) {
+                    do {
+                        String emailDB =
+                                cursor.getString(cursor.getColumnIndex("email"));
+                        if (email.equals(emailDB)) {
+                            emailExistenceCheck = true;
+                            Toast.makeText(SignUpScreen.this, "Email already exists", Toast.LENGTH_SHORT).show();
+                        }
+                    } while (cursor.moveToNext());
+                }
+                if (!emailExistenceCheck) {
+                    if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        Toast.makeText(SignUpScreen.this, "Insert Data First", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                            if (password.length() >= 8) {
+                                if (password.equals(confirmPassword)) {
+                                    dbClass.insert(name, email, password);
+                                    Toast.makeText(SignUpScreen.this, "Data Saved", Toast.LENGTH_LONG).show();
+                                    etSignUpName.setText("");
+                                    etSignUpEmail.setText("");
+                                    etSignUpPassword.setText("");
+                                } else {
+                                    Toast.makeText(SignUpScreen.this, "Password doesn't match", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(SignUpScreen.this, "Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(SignUpScreen.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
         });
