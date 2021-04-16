@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RouteDetector</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="back_button_text">&lt;</string>
+    <string name="maps_api_key">AIzaSyCfyE_vGDygtwGwpPrLBJPSYuLJkvF17dc</string>
+</resources>
