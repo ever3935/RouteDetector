@@ -62,14 +62,14 @@
 
         <EditText
             android:id="@+id/etSignUpName"
-            android:hint="Oliver Cederborg"
-            android:textColorHint="@color/hintTextColor"
-            android:padding="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:background="@drawable/button_border"
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="60dp"
+            android:background="@drawable/button_border"
+            android:hint="Oliver Cederborg"
+            android:padding="18dp"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/hintTextColor"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,16 +82,33 @@
             android:textColor="@color/textColor"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/etSignUpEmail"
-            android:hint="tim@apple.com"
-            android:textColorHint="@color/hintTextColor"
-            android:padding="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:background="@drawable/button_border"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/etSignUpEmail"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_border"
+                android:hint="tim@apple.com"
+                android:padding="18dp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/checkboxEmail"
+                android:buttonTint="@color/buttonColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/etSignUpEmail"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/containerBackgroundColor"
+                android:foregroundGravity="center_horizontal" />
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -103,16 +120,33 @@
             android:textColor="@color/textColor"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/etSignUpPassword"
-            android:hint="Pick a strong password"
-            android:textColorHint="@color/hintTextColor"
-            android:padding="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:background="@drawable/button_border"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/etSignUpPassword"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_border"
+                android:hint="Pick a strong password"
+                android:padding="18dp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/checkboxPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/etSignUpPassword"
+                android:buttonTint="@color/buttonColor"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/containerBackgroundColor"
+                android:foregroundGravity="center_horizontal" />
+
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -124,21 +158,37 @@
             android:textColor="@color/textColor"
             android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/etSignUpConfirmPassword"
-            android:hint="Password should match"
-            android:textColorHint="@color/hintTextColor"
-            android:padding="10dp"
-            android:textSize="16sp"
-            android:textColor="@color/textColor"
-            android:background="@drawable/button_border"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"/>
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/etSignUpConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/button_border"
+                android:hint="Password should match"
+                android:padding="18dp"
+                android:textColor="@color/textColor"
+                android:textColorHint="@color/hintTextColor"
+                android:textSize="16sp" />
+
+            <CheckBox
+                android:id="@+id/checkboxConfirmPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/etSignUpConfirmPassword"
+                android:buttonTint="@color/buttonColor"
+                android:layout_marginTop="14dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/containerBackgroundColor"
+                android:foregroundGravity="center_horizontal" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/createAccountButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:layout_marginTop="35dp"
             android:background="@drawable/button_background"
             android:text="Create Account"

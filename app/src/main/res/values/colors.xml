@@ -10,4 +10,10 @@
     <color name="textColor">#B8B8B8</color>
     <color name="hintTextColor">#D8B8B8B8</color>
     <color name="buttonColor">#c44bc1</color>
+    <color name="mapboxWhite">#ffffff</color>
+    <color name="mapboxBlue">#4264fb</color>
+    <color name="mapboxGrayLight">#c6d2e1</color>
+    <color name="mapboxPink">#ee4e8b</color>
+    <color name="mapboxYellow">#d9d838</color>
+    <color name="mapboxRed">#b43b71</color>
 </resources>

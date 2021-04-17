@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mapbox.mapboxsdk.Mapbox;
+
 public class LoginScreen extends AppCompatActivity {
 
     Button loginButton;
@@ -25,15 +27,7 @@ public class LoginScreen extends AppCompatActivity {
 
         loginButton = findViewById(R.id.loginButton);
         signUpTextLoginScreen = findViewById(R.id.signUpTextLoginScreen);
-//        loginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent intent = new Intent(LoginScreen.this, MapsActivity.class);
-////                startActivity(intent);
-//
-//            }
-//        });
-
+        final Intent intent = new Intent(LoginScreen.this, MapBox.class);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,9 +48,10 @@ public class LoginScreen extends AppCompatActivity {
                                     emailCheck = true;
                                     String passwordDB =
                                             cursor.getString(cursor.getColumnIndex("password"));
-                                    if (password.equals(passwordDB))
-                                        Toast.makeText(LoginScreen.this, emailDB + " | " + password + "\n Login Successful", Toast.LENGTH_LONG).show();
-                                    else
+                                    if (password.equals(passwordDB)) {
+                                        startActivity(intent);
+                                        Toast.makeText(LoginScreen.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
+                                    } else
                                         Toast.makeText(LoginScreen.this, "Incorrect Password", Toast.LENGTH_LONG).show();
                                 }
                             } while (cursor.moveToNext());

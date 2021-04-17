@@ -9,44 +9,43 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button bt1;
-    EditText etName;
-    Button loginButton;
-    TextView signUpTextLoginScreen;
+    Button loginButtonHomeScreen;
+    Button signUpButtonHomeScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this, LoginScreen.class);
-        startActivity(intent);
-        bt1 = findViewById(R.id.maps);
-        signUpTextLoginScreen = findViewById(R.id.signUpTextLoginScreen);
+        Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
+        setContentView(R.layout.activity_main);
+//        mapView.onCreate(savedInstanceState);
 
 
+//        mapView.getMapAsync((OnMapReadyCallback) MainActivity.this);
 
-//        etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if(hasFocus){
-//                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-//                    startActivity(intent);
-//                    v.setBackgroundResource( R.drawable.focused_border);
-//                }
-//                else{
-//                    v.setBackgroundResource( R.drawable.unfocused_border);
-//                }
-//            }
-//        });
 
-        bt1.setOnClickListener(new View.OnClickListener() {
+        loginButtonHomeScreen = findViewById(R.id.loginButtonHomeScreen);
+        loginButtonHomeScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, LoginScreen.class);
+                startActivity(intent);
             }
         });
 
-
+        signUpButtonHomeScreen = findViewById(R.id.signUpButtonHomeScreen);
+        signUpButtonHomeScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignUpScreen.class);
+                startActivity(intent);
+            }
+        });
     }
 }

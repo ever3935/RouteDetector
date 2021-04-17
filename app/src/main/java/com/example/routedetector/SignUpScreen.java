@@ -3,13 +3,18 @@ package com.example.routedetector;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
 
 public class SignUpScreen extends AppCompatActivity {
     EditText etSignUpEmail;
@@ -18,17 +23,54 @@ public class SignUpScreen extends AppCompatActivity {
     EditText etSignUpName;
     Button createAccountButton;
     TextView loginTextSignUpScreen;
+    CheckBox checkBoxEmail;
+    CheckBox checkBoxPassword;
+    CheckBox checkBoxConfirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup_screen);
 
+        checkBoxEmail = findViewById(R.id.checkboxEmail);
+        checkBoxPassword = findViewById(R.id.checkboxPassword);
+        checkBoxConfirmPassword = findViewById(R.id.checkboxConfirmPassword);
+
+        checkBoxEmail.setChecked(true);
+        checkBoxPassword.setChecked(true);
+        checkBoxConfirmPassword.setChecked(true);
+
+        checkBoxEmail.setVisibility(View.INVISIBLE);
+        checkBoxPassword.setVisibility(View.INVISIBLE);
+        checkBoxConfirmPassword.setVisibility(View.INVISIBLE);
+
         etSignUpEmail = findViewById(R.id.etSignUpEmail);
+        etSignUpEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (etSignUpEmail.getText().toString().equals("bari")) {
+                    checkBoxEmail.setVisibility(View.VISIBLE);
+                }
+                else {
+                    checkBoxEmail.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         etSignUpEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+
                     v.setBackgroundResource(R.drawable.focused_border);
                 } else {
                     v.setBackgroundResource(R.drawable.unfocused_border);

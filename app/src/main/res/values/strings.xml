@@ -3,4 +3,11 @@
     <string name="title_activity_maps">Map</string>
     <string name="back_button_text">&lt;</string>
     <string name="maps_api_key">AIzaSyCfyE_vGDygtwGwpPrLBJPSYuLJkvF17dc</string>
+    <string name="permission_required_toast">required</string>
+    <string name="location_permission_denied">pmDenied</string>
+    <string name="permission_rationale_location">pmRation</string>
+    <string name="access_token" translatable="false">pk.eyJ1IjoiZXZlcjM5MzUiLCJhIjoiY2tncXB3YzZ4MDdpdjJ1b2JtZzMzMnJndSJ9._XDy2Behq_ZX70R4WwxyGA</string>
+    <string name="mapbox_access_token" translatable="false">pk.eyJ1IjoiZXZlcjM5MzUiLCJhIjoiY2tncXB3YzZ4MDdpdjJ1b2JtZzMzMnJndSJ9._XDy2Behq_ZX70R4WwxyGA</string>
+    <string name="user_location_permission_explanation">This app needs location permissions to show its functionality.</string>
+    <string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 </resources>
