@@ -72,7 +72,7 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
                             .zoom(16)
                             .bearing(0)
                             .tilt(0)
-                            .build(); // Creates a CameraPosition from the builder
+                            .build();
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 7000);
                 }
             }
@@ -159,10 +159,7 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
                             Toast.makeText(MapBox.this, "No routes found", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         currentRoute = response.body().routes().get(0);
-
-                        // Draw the route on the map
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
