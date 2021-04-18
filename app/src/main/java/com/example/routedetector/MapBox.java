@@ -2,25 +2,21 @@ package com.example.routedetector;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Geometry;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
@@ -28,6 +24,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.traffic.TrafficPlugin;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
@@ -35,98 +32,61 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.mapbox.geojson.Point;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import java.util.List;
-import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.Toast;
-
-// classes needed to initialize map
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-
-// classes needed to add the location component
-import com.mapbox.android.core.permissions.PermissionsListener;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-
-// classes needed to add a marker
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-
-// classes to calculate a route
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
-import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import android.util.Log;
-
-// classes needed to launch navigation UI
-import android.view.View;
-import android.widget.Button;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
-
 import org.jetbrains.annotations.NotNull;
 
 
 public class MapBox extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener, PermissionsListener {
-    // variables for adding location layer
+
     private MapView mapView;
     private MapboxMap mapboxMap;
-    // variables for adding location layer
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
-    // variables for calculating and drawing a route
+
     private DirectionsRoute currentRoute;
-    private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
-    // variables needed to initialize navigation
-    private Button button;
+    private FloatingActionButton button;
+    private FloatingActionButton currentLocationButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_map_box);
-//        mapView.onCreate(savedInstanceState);
         mapView = findViewById(R.id.mapView);
-//        mapView = (MapView) R.layout.findViewById(R.id.mapView);
         mapView.getMapAsync(this);
+        currentLocationButton = findViewById(R.id.currentLocationButton);
+        currentLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Location lastKnownLocation = mapboxMap.getLocationComponent().getLastKnownLocation();
+                if (lastKnownLocation != null) {
+                    CameraPosition position = new CameraPosition.Builder()
+                            .target(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude())) // Sets the new camera position
+                            .zoom(16)
+                            .bearing(0)
+                            .tilt(0)
+                            .build(); // Creates a CameraPosition from the builder
+                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 7000);
+                }
+            }
+        });
     }
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(getString(R.string.navigation_guidance_day), new Style.OnStyleLoaded() {
+        mapboxMap.setStyle(getString(R.string.navigation_guidance_night), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+                TrafficPlugin trafficPlugin = new TrafficPlugin(mapView, mapboxMap, style);
+                trafficPlugin.setVisibility(true);
                 enableLocationComponent(style);
                 addDestinationIconSymbolLayer(style);
                 mapboxMap.addOnMapClickListener(MapBox.this);
@@ -134,12 +94,17 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NavigationLauncherOptions options = NavigationLauncherOptions.builder()
-                                .directionsRoute(currentRoute)
-                                .shouldSimulateRoute(true)
-                                .build();
-                        // Call this method with Context from within an Activity
-                        NavigationLauncher.startNavigation(MapBox.this, options);
+                        try {
+                            NavigationLauncherOptions options = NavigationLauncherOptions.builder()
+                                    .directionsRoute(currentRoute)
+                                    .shouldSimulateRoute(false)
+                                    .build();
+                            // Call this method with Context from within an Activity
+                            NavigationLauncher.startNavigation(MapBox.this, options);
+
+                        } catch (Exception ex) {
+                            Toast.makeText(MapBox.this, ex.toString(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -160,22 +125,19 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
         loadedMapStyle.addLayer(destinationSymbolLayer);
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-
         Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
         Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
                 locationComponent.getLastKnownLocation().getLatitude());
-
         GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
         if (source != null) {
             source.setGeoJson(Feature.fromGeometry(destinationPoint));
         }
-
         getRoute(originPoint, destinationPoint);
         button.setEnabled(true);
-        button.setBackgroundResource(R.color.mapboxBlue);
+        button.setBackgroundResource(R.drawable.button_background);
         return true;
     }
 
@@ -189,13 +151,12 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<DirectionsResponse> call, @NotNull Response<DirectionsResponse> response) {
-                        // You can get the generic HTTP info about the response
-//                        Log.d(TAG, "Response code: " + response.code());
+//                        Toast.makeText(MapBox.this, "Response code: " + response.code(), Toast.LENGTH_SHORT).show();
                         if (response.body() == null) {
-//                            Log.e(TAG, "No routes found, make sure you set the right user and access token.");
+                            Toast.makeText(MapBox.this, "No routes found, make sure you set the right user and access token", Toast.LENGTH_SHORT).show();
                             return;
                         } else if (response.body().routes().size() < 1) {
-//                            Log.e(TAG, "No routes found");
+                            Toast.makeText(MapBox.this, "No routes found", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -212,17 +173,14 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
 
                     @Override
                     public void onFailure(@NotNull Call<DirectionsResponse> call, @NotNull Throwable throwable) {
-//                        Log.e(TAG, "Error: " + throwable.getMessage());
+                        Toast.makeText(MapBox.this, "Error: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
-        // Check if permissions are enabled and if not request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            // Activate the MapboxMap LocationComponent to show user location
-            // Adding in LocationComponentOptions is also an optional parameter
             locationComponent = mapboxMap.getLocationComponent();
             locationComponent.activateLocationComponent(this, loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
@@ -241,7 +199,7 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.user_location_permission_explanation, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -249,7 +207,7 @@ public class MapBox extends AppCompatActivity implements OnMapReadyCallback, Map
         if (granted) {
             enableLocationComponent(mapboxMap.getStyle());
         } else {
-            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.user_location_permission_not_granted, Toast.LENGTH_SHORT).show();
             finish();
         }
     }

@@ -22,12 +22,13 @@
             android:layout_height="60dp"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/button_border"
-                android:text="@string/back_button_text"
-                android:textColor="@color/textColor" />
+            <ImageButton
+                android:id="@+id/backButtonSignUpScreen"
+                android:layout_marginTop="14dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:onClick="onClickBackButtonSignUpScreen"
+                android:background="@drawable/back" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -133,6 +134,7 @@
                 android:padding="18dp"
                 android:textColor="@color/textColor"
                 android:textColorHint="@color/hintTextColor"
+                android:inputType="textPassword"
                 android:textSize="16sp" />
 
             <CheckBox
@@ -171,6 +173,7 @@
                 android:padding="18dp"
                 android:textColor="@color/textColor"
                 android:textColorHint="@color/hintTextColor"
+                android:inputType="textPassword"
                 android:textSize="16sp" />
 
             <CheckBox

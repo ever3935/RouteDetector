@@ -23,13 +23,13 @@
             android:layout_height="60dp"
             android:orientation="horizontal">
 
-            <Button
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:background="@drawable/button_border"
-                android:text="@string/back_button_text"
-                android:textColor="@color/textColor"
-                android:textSize="20sp" />
+            <ImageButton
+                android:id="@+id/backButtonLoginScreen"
+                android:onClick="onClickBackButtonLoginScreen"
+                android:layout_marginTop="14dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/back" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,6 +90,7 @@
             android:layout_height="60dp"
             android:background="@drawable/button_border"
             android:hint="Enter your password"
+            android:inputType="textPassword"
             android:padding="18dp"
             android:textColor="@color/textColor"
             android:textColorHint="@color/hintTextColor"

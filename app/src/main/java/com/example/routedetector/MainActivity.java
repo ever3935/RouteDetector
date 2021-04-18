@@ -24,11 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Mapbox.getInstance(this, getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_main);
-//        mapView.onCreate(savedInstanceState);
-
-
-//        mapView.getMapAsync((OnMapReadyCallback) MainActivity.this);
-
 
         loginButtonHomeScreen = findViewById(R.id.loginButtonHomeScreen);
         loginButtonHomeScreen.setOnClickListener(new View.OnClickListener() {

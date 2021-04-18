@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,6 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
-
         loginButton = findViewById(R.id.loginButton);
         signUpTextLoginScreen = findViewById(R.id.signUpTextLoginScreen);
         final Intent intent = new Intent(LoginScreen.this, MapBox.class);
@@ -35,6 +35,7 @@ public class LoginScreen extends AppCompatActivity {
                 String email = etLoginEmail.getText().toString();
                 etLoginPassword = findViewById(R.id.etLoginPassword);
                 String password = etLoginPassword.getText().toString();
+
                 Database dbClass = new Database(LoginScreen.this);
                 Cursor cursor = dbClass.getData();
                 boolean emailCheck = false;
@@ -50,20 +51,20 @@ public class LoginScreen extends AppCompatActivity {
                                             cursor.getString(cursor.getColumnIndex("password"));
                                     if (password.equals(passwordDB)) {
                                         startActivity(intent);
-                                        Toast.makeText(LoginScreen.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginScreen.this, "Successfully Logged In", Toast.LENGTH_SHORT).show();
                                     } else
-                                        Toast.makeText(LoginScreen.this, "Incorrect Password", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginScreen.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                                 }
                             } while (cursor.moveToNext());
                         }
                         if (!emailCheck) {
-                            Toast.makeText(LoginScreen.this, "Email not exist", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginScreen.this, "Email not exist", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(LoginScreen.this, "Invalid Email", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(LoginScreen.this, "Fields required", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginScreen.this, "Fields required", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -100,5 +101,9 @@ public class LoginScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void onClickBackButtonLoginScreen(View v){
+        finish();
     }
 }
